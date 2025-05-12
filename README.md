@@ -1,0 +1,1 @@
+This project is a REST API for a travel app, built using Node.js, Express, and Sequelize (with a MySQL database). It provides features for user authentication, post creation, likes/dislikes, following users, and fetching country data. 
