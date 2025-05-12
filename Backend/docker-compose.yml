@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: travel_app
+    ports:
+      - '3000:3000'
+    environment:
+      DB_HOST: db
+      DB_NAME: traveltales
+      DB_USER: root
+      DB_PASSWORD: 1234
+    depends_on:
+      - db
+    networks:
+      - travel_network
+
+  db:
+    image: mysql:8.0
+    container_name: travel_db
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: travel_app
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - travel_network
+
+volumes:
+  db_data:
+
+networks:
+  travel_network:
