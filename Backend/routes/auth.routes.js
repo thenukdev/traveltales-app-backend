@@ -181,6 +181,35 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Reset password route
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { username, newPassword } = req.body;
+
+    // Validate input
+    if (!username || !newPassword) {
+      return res.status(400).json({ message: 'Username and new password are required' });
+    }
+
+    // Find user
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password
+    await user.update({ password: hashedPassword });
+
+    res.json({ message: 'Password reset successful' });
+  } catch (error) {
+    console.error('Password reset error:', error);
+    res.status(500).json({ message: 'Error resetting password' });
+  }
+});
+
 // Protected route example
 router.get('/profile', authenticateToken, async (req, res) => {
   try {
